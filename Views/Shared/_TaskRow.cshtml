@@ -1,0 +1,61 @@
+@model TaskManagement.ViewModels.TaskViewModel
+
+@{
+    var statusBadgeClass = Model.Status switch
+    {
+        TaskManagement.Enums.TaskStatus.Active  => "badge-status-active",
+        TaskManagement.Enums.TaskStatus.Urgent  => "badge-status-urgent",
+        TaskManagement.Enums.TaskStatus.Overdue => "badge-status-overdue",
+        TaskManagement.Enums.TaskStatus.Done    => "badge-status-done",
+        _ => "bg-secondary"
+    };
+
+    var priorityBadge = Model.Priority switch
+    {
+        TaskManagement.Enums.Priority.Low    => "bg-secondary",
+        TaskManagement.Enums.Priority.Medium => "bg-warning text-dark",
+        TaskManagement.Enums.Priority.High   => "bg-danger",
+        _ => "bg-secondary"
+    };
+}
+
+<tr class="@(Model.IsCompleted ? "table-success opacity-75" : "")">
+    <td class="fw-semibold">@Model.Title</td>
+    <td>
+        <span class="badge @priorityBadge">@Model.Priority</span>
+    </td>
+    <td>
+        @if (Model.Deadline.HasValue)
+        {
+            <span>@Model.Deadline.Value.ToString("dd MMM yyyy")</span>
+        }
+        else
+        {
+            <span class="text-muted">—</span>
+        }
+    </td>
+    <td>
+        <span class="badge @statusBadgeClass">@Model.Status</span>
+    </td>
+    <td>
+        <div class="d-flex gap-2">
+            <a asp-action="Details" asp-route-id="@Model.Id"
+               class="btn btn-sm btn-outline-secondary" title="Details">
+                <i class="bi bi-eye"></i>
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.Id"
+               class="btn btn-sm btn-outline-primary" title="Edit">
+                <i class="bi bi-pencil"></i>
+            </a>
+            <button type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal"
+                    data-task-id="@Model.Id"
+                    data-task-title="@Model.Title"
+                    title="Delete">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    </td>
+</tr>

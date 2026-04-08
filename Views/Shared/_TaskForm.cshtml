@@ -1,0 +1,54 @@
+@model TaskManagement.ViewModels.TaskViewModel
+
+<div class="mb-3">
+    <label class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
+    <input type="text" name="Title" value="@Model.Title"
+           class="form-control @(Model.ValidationErrors.ContainsKey("Title") ? "is-invalid" : "")"
+           placeholder="Enter task title" />
+    @if (Model.ValidationErrors.TryGetValue("Title", out var titleError))
+    {
+        <div class="invalid-feedback">@titleError</div>
+    }
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-semibold">Description</label>
+    <textarea name="Description" rows="3"
+              class="form-control"
+              placeholder="Optional description">@Model.Description</textarea>
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-semibold">Priority</label>
+    <select name="Priority" class="form-select">
+        @foreach (TaskManagement.Enums.Priority p in Enum.GetValues(typeof(TaskManagement.Enums.Priority)))
+        {
+            if (Model.Priority == p)
+            {
+                <option value="@((int)p)" selected>@p</option>
+            }
+            else
+            {
+                <option value="@((int)p)">@p</option>
+            }
+        }
+    </select>
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-semibold">Deadline</label>
+    <input type="date" name="Deadline"
+           value="@(Model.Deadline?.ToString("yyyy-MM-dd"))"
+           class="form-control @(Model.ValidationErrors.ContainsKey("Deadline") ? "is-invalid" : "")" />
+    @if (Model.ValidationErrors.TryGetValue("Deadline", out var deadlineError))
+    {
+        <div class="invalid-feedback">@deadlineError</div>
+    }
+</div>
+
+<div class="mb-4 form-check">
+    <input type="hidden" name="IsCompleted" value="false" />
+    <input type="checkbox" name="IsCompleted" value="true" id="isCompleted"
+           class="form-check-input" @(Model.IsCompleted ? "checked" : "") />
+    <label class="form-check-label" for="isCompleted">Mark as Completed</label>
+</div>
