@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using TaskManagement.Enums;
 using TaskManagement.Services.Interfaces;
 using TaskManagement.ViewModels;
 
@@ -14,7 +13,6 @@ namespace TaskManagement.Controllers
             _taskService = taskService;
         }
 
-        // GET: /Task/Index?sortBy=priority&sortOrder=asc
         [HttpGet]
         public async Task<IActionResult> Index(string? sortBy, string? sortOrder)
         {
@@ -45,7 +43,6 @@ namespace TaskManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TaskViewModel viewModel)
         {
-            // Manual validation
             viewModel.Validate();
 
             if (!viewModel.IsValid)
@@ -74,7 +71,6 @@ namespace TaskManagement.Controllers
             if (id != viewModel.Id)
                 return BadRequest();
 
-            // Manual validation
             viewModel.Validate();
 
             if (!viewModel.IsValid)
@@ -84,7 +80,7 @@ namespace TaskManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /Task/Delete/5  (no GET delete page — confirmed via modal in Index)
+        // POST: /Task/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

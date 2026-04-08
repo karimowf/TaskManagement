@@ -54,14 +54,7 @@ namespace TaskManagement.Services
             await _repository.DeleteAsync(id);
         }
 
-        // -------------------------------------------------------
-        // Status is computed at runtime — never stored in the DB
-        // Rules:
-        //   IsCompleted = true       → Done
-        //   Deadline passed          → Overdue
-        //   Deadline within 24 hrs  → Urgent
-        //   Otherwise               → Active
-        // -------------------------------------------------------
+     
         private static Enums.TaskStatus ComputeStatus(TaskItem task)
         {
             if (task.IsCompleted)
@@ -81,10 +74,7 @@ namespace TaskManagement.Services
             return Enums.TaskStatus.Active;
         }
 
-        // -------------------------------------------------------
-        // Sorting: Priority uses custom order Low < Medium < High
-        // which maps to enum int values 1 < 2 < 3 already.
-        // -------------------------------------------------------
+       
         private static List<TaskViewModel> ApplySorting(
             List<TaskViewModel> tasks,
             string? sortBy,
@@ -106,9 +96,7 @@ namespace TaskManagement.Services
             };
         }
 
-        // -------------------------------------------------------
-        // Mapping helpers
-        // -------------------------------------------------------
+      
         private static TaskViewModel MapToViewModel(TaskItem task)
         {
             return new TaskViewModel
@@ -133,7 +121,6 @@ namespace TaskManagement.Services
                 Priority    = vm.Priority,
                 Deadline    = vm.Deadline,
                 IsCompleted = vm.IsCompleted
-                // Status is NOT mapped — it is not stored in DB
             };
         }
     }

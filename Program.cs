@@ -7,22 +7,15 @@ using TaskManagement.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// -------------------------------------------------------
-// Services
-// -------------------------------------------------------
+
 builder.Services.AddControllersWithViews();
 
-// PostgreSQL via EF Core
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Dependency Injection — Repository & Service layers
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 
-// -------------------------------------------------------
-// Pipeline
-// -------------------------------------------------------
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -40,7 +33,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Task}/{action=Index}/{id?}");
 
-// Auto-apply pending migrations on startup (optional, remove in production)
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
